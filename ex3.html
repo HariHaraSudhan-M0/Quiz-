@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz Application</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-100">
+    <div class="container mx-auto py-8">
+      <h1 class="text-3xl font-bold text-center mb-6">Quiz Application</h1>
+      <div class="quiz bg-white p-8 rounded-lg shadow-md">
+        <div class="question text-lg font-semibold mb-4"></div>
+        <div
+          class="options grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6"
+        ></div>
+        <div class="feedback text-lg font-semibold mb-4"></div>
+        <div class="score text-lg font-semibold mb-4"></div>
+        <button
+          class="btn start bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded focus:outline-none"
+        >
+          Start Quiz
+        </button>
+        <button
+          class="btn restart bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded focus:outline-none hidden">
+          Restart Quiz
+        </button>
+      </div>
+    </div>
+    <script>
+      const quizData = [
+        {
+          question: "What does CPU stand for?",
+          options: [
+            "Computer Processing Unit",
+            "Central Processing Unit",
+            "Central Process Unit",
+            "Computer Program Unit",
+          ],
+          answer: "Central Processing Unit",
+        },
+        {
+          question:
+            "Which programming language is known as 'the mother of all languages'?",
+          options: ["Python", "Assembly Language", "Java", "C"],
+          answer: "C",
+        },
+        {
+          question: "What is the full form of HTML?",
+          options: [
+            "Hyperlinking Text Markup Language",
+            "High-level Text Markup Language",
+            "Hyper Text Markup Language",
+            "Hyperlinking Text Manipulation Language",
+          ],
+          answer: "Hyper Text Markup Language",
+        },
+        {
+          question: "What does CSS stand for?",
+          options: [
+            "Cascading Style Sheets",
+            "Computer Style Sheets",
+            "Creative Style Sheets",
+            "Cascading Sheet Styles",
+          ],
+          answer: "Cascading Style Sheets",
+        },
+        {
+          question: "What is the function of RAM in a computer?",
+          options: [
+            "Stores data permanently",
+            "Manages input and output devices",
+            "Processes data for the CPU",
+            "Stores temporary data while the computer is running",
+          ],
+          answer: "Stores temporary data while the computer is running",
+        },
+      ];
+      const container = document.querySelector(".container");
+      const questionElement = document.querySelector(".question");
+      const optionsContainer = document.querySelector(".options");
+      const feedbackElement = document.querySelector(".feedback");
+      const scoreElement = document.querySelector(".score");
+      const startBtn = document.querySelector(".start");
+      const restartBtn = document.querySelector(".restart");
+      let currentQuestionIndex = 0;
+      let score = 0;
+      function startQuiz() {
+        startBtn.style.display = "none";
+        restartBtn.style.display = "none";
+        feedbackElement.textContent = "";
+        scoreElement.textContent = "";
+        score = 0;
+        currentQuestionIndex = 0;
+        showQuestion();
+      }
+      function showQuestion() {
+        const currentQuestion = quizData[currentQuestionIndex];
+        questionElement.textContent = currentQuestion.question;
+        optionsContainer.innerHTML = "";
+        currentQuestion.options.forEach((option, index) => {
+          const optionElement = document.createElement("button");
+          optionElement.textContent = option;
+          optionElement.classList.add(
+            "btn",
+            "option",
+            "bg-gray-200",
+            "hover:bg-gray-300",
+            "text-gray-800",
+            "py-2",
+            "px-4",
+            "rounded"
+          );
+          optionElement.addEventListener("click", () => checkAnswer(option));
+          optionsContainer.appendChild(optionElement);
+        });
+      }
+      function checkAnswer(selectedOption) {
+        const currentQuestion = quizData[currentQuestionIndex];
+        if (selectedOption === currentQuestion.answer) {
+          feedbackElement.textContent = "Correct!";
+          score++;
+        } else {
+          feedbackElement.textContent = "Incorrect!";
+        }
+        currentQuestionIndex++;
+        if (currentQuestionIndex < quizData.length) {
+          showQuestion();
+        } else {
+          showScore();
+        }
+      }
+      function showScore() {
+        questionElement.textContent = "";
+        optionsContainer.innerHTML = "";
+        feedbackElement.textContent = "";
+        scoreElement.textContent = `Your Score: ${score} out of ${quizData.length}`;
+        restartBtn.style.display = "inline-block";
+      }
+      startBtn.addEventListener("click", startQuiz);
+      restartBtn.addEventListener("click", startQuiz);
+    </script>
+  </body>
+</html>
